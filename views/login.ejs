@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    
+    <meta name="google-signin-client_id" content="995611856341-ff46ekmojgjqbuouoapopq40bdel1cn2.apps.googleusercontent.com" />
+    
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+
+<body>
+    <h1>It is Login page</h1>
+    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    <a href="#" onclick="signOut();">Sign out</a>
+    <script>
+
+        function onSignIn(googleUser) {
+            const id_token = googleUser.getAuthResponse().id_token;
+            console.log(id_token);
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/login');
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                console.log(`Signed in as : ${xhr.responseText}`);
+                if(xhr.responseText === 'success'){
+                    signOut();
+                    location.assign('/dashboard');
+                }};
+            xhr.send(JSON.stringify({token:id_token}));
+            // const profile = googleUser.getBasicProfile();
+            // console.log(`Id : ${profile.getId()}`);
+            // console.log(`Name : ${profile.getName()}`);
+            // console.log(`Image URL : ${profile.getImageUrl()}`);
+            // console.log(`Email : ${profile.getEmail()}`);
+        }
+    </script>
+    <script>
+        function signOut() {
+            const auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function() {
+                console.log(`User signed out...`);
+            }).catch(function(e){
+                console.log(`Something went wrong`,e)
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,7 @@
+version: '3'
+services:
+  web-app:
+    build: .
+    container_name: oauth
+    ports:
+    - "4010:4010"
